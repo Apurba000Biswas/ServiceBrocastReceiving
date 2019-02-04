@@ -1,6 +1,9 @@
 package com.example.servicebrocastreceiving;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +21,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(DownloaderService.DOWNLOAD_BROADCAST_ACTION);
+        registerReceiver(new MyBroadcastReceiver(), filter);
     }
 
     public void downloadClicked(View view) {
@@ -42,5 +50,18 @@ public class MainActivity extends AppCompatActivity {
     private void downloadWithoutService(){
         Downloader.downloadFake(URL, 3000);
         Toast.makeText(this, "Download Complete", Toast.LENGTH_SHORT).show();
+    }
+
+
+
+
+
+    private class MyBroadcastReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String url = intent.getStringExtra("url");
+            Toast.makeText(context, "Service Finished the download of "
+                    + url, Toast.LENGTH_SHORT).show();
+        }
     }
 }

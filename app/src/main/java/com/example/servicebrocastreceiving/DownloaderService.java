@@ -6,6 +6,12 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 public class DownloaderService extends Service {
+    // use a long String to send the broadcast result so thst it dose
+    // not collide with any other broadcast message
+    public static final String DOWNLOAD_BROADCAST_ACTION =
+            "DownloaderService_FAKE_DOWNLOAD_IS_COMPLETE";
+
+
     public DownloaderService() {
     }
 
@@ -32,6 +38,10 @@ public class DownloaderService extends Service {
                 // If you want to show a toast Message or anything in the Ui after service
                 // done with its task, you have to Broadcast the result
                 // Toast.makeText(DownloaderService.this, "Download Finished", Toast.LENGTH_SHORT).show();
+                Intent done = new Intent();
+                done.setAction(DOWNLOAD_BROADCAST_ACTION);
+                done.putExtra("url", url);
+                sendBroadcast(done);
             }
         });
         thread.start();
