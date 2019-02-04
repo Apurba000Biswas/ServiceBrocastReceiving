@@ -3,6 +3,7 @@ package com.example.servicebrocastreceiving;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.widget.Toast;
 
 public class DownloaderService extends Service {
     public DownloaderService() {
@@ -10,7 +11,35 @@ public class DownloaderService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
+        final String url = intent.getStringExtra("url");
+        final  int delay = intent.getIntExtra("delay", 0);
+
+        // without extra thread
+        // withoutExtraThread(url, delay);
+        // with extra thread
+        withExtraThread(url, delay);
+
+        return START_STICKY;
+    }
+
+    private void withExtraThread(final String url, final int delay){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Downloader.downloadFake(url, delay);
+                // you actually can not create any UI event in a background thread
+                // in Android , So the Toast is making crash here.
+                // If you want to show a toast Message or anything in the Ui after service
+                // done with its task, you have to Broadcast the result
+                // Toast.makeText(DownloaderService.this, "Download Finished", Toast.LENGTH_SHORT).show();
+            }
+        });
+        thread.start();
+    }
+
+    private void withoutExtraThread(String url, int delay){
+        Downloader.downloadFake(url, delay);
+        Toast.makeText(this, "Download Finished", Toast.LENGTH_SHORT).show();
     }
 
     @Override

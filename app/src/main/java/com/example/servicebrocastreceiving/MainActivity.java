@@ -1,11 +1,14 @@
 package com.example.servicebrocastreceiving;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.net.URI;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +26,17 @@ public class MainActivity extends AppCompatActivity {
         EditText etUrl = findViewById(R.id.et_url);
 
         // without service
-        downloadWithoutService();
+        //downloadWithoutService();
+        // Download with a service
+        downloadWithService();
+    }
+
+    private void downloadWithService(){
+        Intent downloadIntent = new Intent(this, DownloaderService.class);
+        downloadIntent.putExtra("url", URL);
+        downloadIntent.putExtra("delay", 3000);
+        Toast.makeText(this, "Starting Download ....", Toast.LENGTH_SHORT).show();
+        startService(downloadIntent);
     }
 
     private void downloadWithoutService(){
