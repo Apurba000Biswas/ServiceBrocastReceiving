@@ -36,7 +36,17 @@ public class MainActivity extends AppCompatActivity {
         // without service
         //downloadWithoutService();
         // Download with a service
-        downloadWithService();
+        //downloadWithService();
+        // DownloadWithIntentServices
+        downloadWithIntentService();
+    }
+
+    private void downloadWithIntentService(){
+        Intent downloadIntent = new Intent(this, DownloaderIntentService.class);
+        downloadIntent.putExtra("url", URL);
+        downloadIntent.putExtra("delay", 3000);
+        Toast.makeText(this, "Starting Download ....", Toast.LENGTH_SHORT).show();
+        startService(downloadIntent);
     }
 
     private void downloadWithService(){
