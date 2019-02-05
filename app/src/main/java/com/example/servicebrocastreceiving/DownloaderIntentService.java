@@ -3,6 +3,7 @@ package com.example.servicebrocastreceiving;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
@@ -34,6 +35,13 @@ public class DownloaderIntentService extends IntentService {
                 .setContentTitle("Download Complete")
                 .setContentText(url)
                 .setSmallIcon(R.drawable.ic_download);
+
+        // make it clickable
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("url", url);
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(this, 0, intent, 0);
+        builder.setContentIntent(pendingIntent);
 
         Notification notification = builder.build();
         NotificationManager manager = (NotificationManager)

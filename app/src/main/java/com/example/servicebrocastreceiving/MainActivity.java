@@ -23,6 +23,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        // if i was invoked from DownloaderIntentService notification
+        Intent intent = getIntent();
+        if(intent != null){
+            String url = intent.getStringExtra("url");
+            if (url != null){
+                Toast.makeText(this, "Called from Notification", Toast.LENGTH_SHORT).show();
+            }
+        }
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(DownloaderService.DOWNLOAD_BROADCAST_ACTION);
         registerReceiver(new MyBroadcastReceiver(), filter);
@@ -70,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String url = intent.getStringExtra("url");
-            Toast.makeText(context, "Service Finished the download of "
-                    + url, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Service Finished the download of "
+             //       + url, Toast.LENGTH_SHORT).show();
         }
     }
 }
